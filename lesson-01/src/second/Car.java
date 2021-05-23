@@ -1,16 +1,19 @@
 package second;
 
-public abstract class Car {
-    public Engine engine;
+public abstract class Car implements Openable {
+
+    private Engine engine;
     private String color;
     private String name;
 
-
-    protected void start() {
-        System.out.println("Car starting");
+    public Car() {
+        engine = new Engine(getClass().getName());
     }
 
-    abstract void open();
+    public void start() {
+        System.out.println("Car is starting");
+        engine.vroomVroom();
+    }
 
     public Engine getEngine() {
         return engine;

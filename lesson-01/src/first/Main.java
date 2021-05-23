@@ -1,6 +1,7 @@
 package first;
 
-public class PersonTester {
+public class Main {
+
     public static void main(String[] args) {
         Person meMyselfAndI =
                 Person.newBuilder().
@@ -11,4 +12,5 @@ public class PersonTester {
                         build();
         System.out.println(meMyselfAndI);
     }
+
 }

@@ -3,13 +3,13 @@ package second;
 public class LightWeightCar extends Car implements Moveable {
 
     @Override
-    void open() {
-        System.out.println("Car is open");
+    public void open() {
+        System.out.println("LightWeightCar is open");
     }
 
     @Override
     public void move() {
-        System.out.println("Car is moving");
+        System.out.println("LightWeightCar is moving");
     }
 
 }

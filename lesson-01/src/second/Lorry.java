@@ -1,13 +1,19 @@
 package second;
 
-public class Lorry extends Car, Moveable, Stopable {
+public class Lorry extends Car implements Moveable, Stopable {
 
-    public void move() {
-        System.out.println("Car is moving");
+    public Lorry() {
+        this.setEngine(new Engine("LorryEngine"));
     }
 
-    public void stop(){
-        System.out.println("Car is stop");
+    @Override
+    public void move() {
+        System.out.println("Lorry is moving");
+    }
+
+    @Override
+    public void stop() {
+        System.out.println("Lorry is stop");
     }
 
 }
