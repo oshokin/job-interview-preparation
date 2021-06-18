@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/metadata.html :: head(pageTitle='Students')"/>
+
+<body>
+
+<nav th:replace="fragments/header.html :: navigation-bar"/>
+
+<div class="container">
+    <div class="row py-2">
+        <form class="form-inline mt-3" method="get">
+            <input type="hidden" name="size" th:value="${sizeAttribute}"/>
+            <div class="form-group mx-sm-3 mb-2">
+                <label for="name-filter" class="sr-only">Name filter:</label>
+                <input th:value="${param.nameFilter}" type="text" class="form-control"
+                       name="nameFilter" id="name-filter" placeholder="Name filter">
+            </div>
+            <div class="form-group mx-sm-3 mb-2">
+                <label for="min-age-filter" class="sr-only">Minimum age:</label>
+                <input th:value="${param.minAge}" type="number" class="form-control"
+                       name="minAge" id="min-age-filter" placeholder="Minimum age">
+            </div>
+            <div class="form-group mx-sm-3 mb-2">
+                <label for="max-age-filter" class="sr-only">Maximum age:</label>
+                <input th:value="${param.maxAge}" type="number" class="form-control"
+                       name="maxAge" id="max-age-filter" placeholder="Maximum age">
+            </div>
+            <input type="hidden" name="sortField" th:value="${sortFieldAttribute}"/>
+            <input type="hidden" name="sortOrder" th:value="${sortOrderAttribute}"/>
+            <button type="submit" class="btn btn-primary mb-2">Apply</button>
+        </form>
+        <div class="col-12">
+            <a class="btn btn-primary" th:href="@{/students/new}">Add Student</a>
+        </div>
+        <div class="col-12">
+            <table class="table table-bordered my-2">
+                <thead>
+                <tr>
+                    <th th:replace="fragments/header.html :: student-table-column(column='id', presentation='Id')"/>
+                    <th th:replace="fragments/header.html :: student-table-column(column='name', presentation='Name')"/>
+                    <th th:replace="fragments/header.html :: student-table-column(column='age', presentation='Age')"/>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:if="${students.hasContent()}" th:each="student : ${students.content}">
+                    <th scope="row" th:text="${student.id}">1</th>
+                    <td th:text="${student.name}">ZX Spectrum</td>
+                    <td th:text="${student.age}">35</td>
+                    <td>
+                        <a class="btn btn-success" th:href="@{/students/edit/{id}(id = ${student.id})}"><i class="fas fa-edit"></i></a>
+                        <a class="btn btn-danger" th:href="@{/students/delete/{id}(id = ${student.id})}"><i class="far fa-trash-alt"></i></a>
+                    </td>
+                </tr>
+                <tr th:unless="${students.hasContent()}">
+                    <td colspan="5">No matching students found</td>
+                </tr>
+                </tbody>
+            </table>
+            <nav aria-label="Pagination">
+                <div th:with="firstPage=${(students.number - 2) lt 0 ? 0 : students.number - 2},
+                            lastPage=${students.number + 2 gt (students.totalPages - 1) ? (students.totalPages - 1) : students.number + 2}">
+                    <ul class="pagination float-right">
+                        <li class="page-item" th:classappend="${students.number eq 0} ? 'disabled'">
+                            <a class="page-link"
+                               th:href="@{/student(page=${students.number lt 2 ? 1 : students.number},
+                                           size=${sizeAttribute},
+                                           nameFilter=${param.nameFilter},
+                                           minAge=${param.minAge},
+                                           maxAge=${param.maxAge},
+                                           sortField=${sortFieldAttribute},
+                                           sortOrder=${sortOrderAttribute})}"
+                               aria-label="Previous"
+                               title="Previous"
+                               rel="tooltip"><</a>
+                        </li>
+                        <li class="page-item" th:classappend="${i eq students.number + 1} ? 'active'"
+                            th:each="i: ${#numbers.sequence(firstPage + 1, lastPage + 1, 1)}">
+                            <a class="page-link"
+                               th:href="@{/students(page=${i},
+                                            size=${sizeAttribute},
+                                            nameFilter=${param.nameFilter},
+                                            minAge=${param.minAge},
+                                            maxAge=${param.maxAge},
+                                            sortField=${sortFieldAttribute},
+                                            sortOrder=${sortOrderAttribute})}" th:text="${i}"
+                               th:title="${'Page '+ i}"
+                               rel="tooltip">Page number</a>
+                        </li>
+                        <li class="page-item" th:classappend="${students.number + 1 eq students.totalPages} ? 'disabled'">
+                            <a class="page-link"
+                               th:href="@{/students(page=${students.number + 2},
+                                            size=${sizeAttribute},
+                                            nameFilter=${param.nameFilter},
+                                            minAge=${param.minAge},
+                                            maxAge=${param.maxAge},
+                                            sortField=${sortFieldAttribute},
+                                            sortOrder=${sortOrderAttribute})}"
+                               aria-label="Next"
+                               title="Next"
+                               rel="tooltip">></a>
+                        </li>
+                    </ul>
+                </div>
+                <div th:if="${students.hasContent()}">
+                    <div class="pagination-detail float-left">
+                        <span class="pagination-info">Showing </span>
+                        <span class="page-list"><span class="btn-group dropdown dropup">
+                        <button class="btn btn-secondary dropdown-toggle" type="button"
+                                data-toggle="dropdown" aria-expanded="false">
+                            <span class="page-size" th:text="${sizeAttribute}">5</span>
+                            <span class="caret"></span></button>
+                        <div class="dropdown-menu">
+                            <a th:replace="fragments/footer.html :: student-pagination-dropdown-item(itemsPerPage=5)"/>
+                            <a th:replace="fragments/footer.html :: student-pagination-dropdown-item(itemsPerPage=10)"/>
+                            <a th:replace="fragments/footer.html :: student-pagination-dropdown-item(itemsPerPage=15)"/>
+                            <a th:replace="fragments/footer.html :: student-pagination-dropdown-item(itemsPerPage=20)"/>
+                        </div></span> students per page</span></div>
+                </div>
+            </nav>
+        </div>
+    </div>
+</div>
+
+<script th:replace="fragments/footer.html :: scripts"/>
+
+</body>
+
+</html>
