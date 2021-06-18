@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<nav th:fragment="navigation-bar" class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" th:href="@{/students}">O.Shokin Classroom</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" th:href="@{/students}">Students</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<th scope="col" th:fragment="student-table-column(column, presentation)">[[${presentation}]]
+    <a th:href="@{/student(
+				page=${students.number + 1},
+				size=${sizeAttribute},
+				nameFilter=${param.nameFilter},
+				minAge=${param.minAge},
+				maxAge=${param.maxAge},
+				sortField=${column},
+				sortOrder=${param.sortField != null && param.sortOrder != null && param.sortField[0] == column && param.sortOrder[0] == 'asc' ? 'desc' : 'asc'}
+				)}">
+        <i th:unless="${param.sortField != null && param.sortOrder != null && param.sortField[0] == column}" class="fa fa-sort"></i>
+        <i th:if="${param.sortField != null && param.sortOrder != null && param.sortField[0] == column}" th:class="'fa fa-sort-' + ${param.sortField[0] == column && param.sortOrder[0] == 'asc' ? 'down' : 'up'}"></i>
+    </a>
+</th>
+
+</html>
